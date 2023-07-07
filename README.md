@@ -134,4 +134,87 @@ $resultado = $conexion->query($sql);
 ***$conexion->close()***
 
 ### Forma 3 --> PDO (PHP Data Object)
+#
+## Clase 52, Conexión a una BBDD mediante PDO
+- Denominada como capa de abstracción, libreria que si situa en medio entre el código PHP y las bases de datos.
+- https://www.php.net/manual/es/book.pdo.php
+1. Instanciamos la clase PDO llamando a la clase PDO con 3 parámetros: 'host+nombreBBDD', 'usuario', 'contraseña'.
+```
+$base=new PDO('mysql:host=localhost;dbname=pruebas', 'root', '');
+```
+Cuando se produce un fallo lo denominamos una "excepción". 
 
+Un fallo que no está relacionado con la sintaxis si no con otro tipo de causas.
+- Las excepciones generan un objeto (objeto fallo), que se ubicará dentro de un bloque try / catch;
+Dentro del **try** introducimos la instancia y dentro del **catch** recibe un argumento / objeto de tipo  **Exception**. 
+- Podemos incluir una tercera funcionalidad dentro del bloque try / catch denominada **finally** que funcionará siempre, tanto si entra en el try como si entra en el catch.
+
+- Podemos acceder a diferentes opciones dentro del obejeto Exception.
+    - Guardamos todas esas opciones dentro de la variable $e
+    - GetMessage--> devuelve el error
+```
+catch(Exception $e){
+    die ('Error: ' . $e->getMessage());
+}
+```
+**Utilidades de incluir $variable = null en finally**
+- Liberar recursos
+- Evitar estados inconscientes: en caso de que se produzca una exception, evita que la variable se utilice en un estado incosciente en código posterior.
+- Limpieza general: Recomendable limpiar variables que ya no son necesarias, especialmente tras operaciones críticas.
+#
+## Clase 53, PDO consultas preparadas
+- Utilizamos el metodo prepare() para generar un objeto de tipo **PDOStatemen**.
+- https://www.php.net/manual/es/pdo.prepare.php
+- https://www.php.net/manual/es/pdostatement.execute.php
+
+```
+    $sql= "SELECT NOMBREARTICULO, SECCION, PRECIO, PAISDEORIGEN FROM PRODUCTOS WHERE NOMBREARTICULO = ?";
+
+    $resultado = $conexion->prepare($sentencia);
+    $resultado-> execute(array("Destornillador"));
+```
+- El método execute busca dentro de la sentencia SQL que declaramos anteriormente, en la columna "NOMBREARTICULO" el elemento destornillador.
+- https://www.php.net/manual/es/pdostatement.fetch.php
+- Función fetch para recorrer la tabla, y devolver todos aquellos elementos que le solicitamos previamente.
+```
+ while($registro=$resultado->fetch(PDO::FETCH_ASSOC)){
+        echo "Nombre artículo" . $registro['NOMBREARTICULO'] . "SECCIÓN: " . $registro['SECCION'] . " Precio: " . $registro['PRECIO'] . " País de origen: " . $registro['PAISDEORIGEN'] . "<br>";
+    }
+```
+- Creando una variabe, llamando al método GET para traer desde un input de otro archivo el valor de búsqueda del usurio y colocando esa variable en el método execute($variable).
+#
+## Clase 54, Marcadores en consultas preparadas
+- Se forma mediante " :nombreQueLeQueramosDar, en este ejemplo :n_art
+```
+    $sql= "SELECT NOMBREARTICULO, SECCION, PRECIO, PAISDEORIGEN FROM PRODUCTOS WHERE NOMBREARTICULO = :n_art";
+    $resultado = $base->prepare($sql);
+    $resultado-> execute(array(":n_art"=>$busqueda));
+```
+#
+- Para buscar diferentes elementos en la consulta
+```
+$seccion = $_GET['seccion'];
+$pais= $_GET['pais'];
+
+    $sql= "SELECT NOMBREARTICULO, SECCION, PRECIO, PAISDEORIGEN FROM PRODUCTOS WHERE SECCION = :SECC AND PAISDEORIGEN = :PAIS";
+    $resultado = $base->prepare($sql);
+    $resultado-> execute(array(":SECC"=>$seccion, ":PAIS" => $pais));
+```
+## Clase 55, Dudas ( falta ver video)
+
+## Clase 56, PDO para insertar y eliminar
+- Ventajas de utilizar marcadores al insertar valores en una BBDD
+    - Comodidad, cuando tenemos varios parámetros en una consulta SQL.
+- Los nombres de los VALUES, no tienen que coincidir con nada del código anterior a esa consulta, sólo deben coincidir en cantidad de elementos con los campos de la consulta.
+```
+    $sql="INSERT INTO PRODUCTOS (CODIGOARTICULO, SECCION, NOMBREARTICULO, PRECIO, FECHA, IMPORTADO, PAISDEORIGEN) VALUE (:c_art,:seccion,:n_art, :precio, :fecha :importado, :p_orig )";
+    $resultado = $base->prepare($sql);
+    $resultado-> execute(array(":c_art"=>$c_art, ":seccion" => $seccion, ":n_art" => $n_art, ":precio" => $precio, ":fecha" => $fecha, ":importado" => $importado, ":p_orig" => $p_orig));
+
+```
+- Eliminar elementos
+```
+    $sql="DELETE FROM PRODUCTOS WHERE CODIGOARTICULO= :c_art";
+    $resultado = $base->prepare($sql);
+    $resultado-> execute(array(":c_art"=>$c_art));
+```
