@@ -1,3 +1,7 @@
+<div style="text-align:center;">
+<img style="width:500px;"  src="https://res.cloudinary.com/manuelcodex/image/upload/v1688821217/manuel.alcazar_a_Valknut_logo_with_a_black_background_each_of_t_29acc2a5-483b-49f7-8fd5-ba2751df2699_qexuv3.png">
+</div>
+
 ```
 Proyecto para pruebas en PHP basado en el curso de pildoras informáticas
 ```
@@ -217,4 +221,33 @@ $pais= $_GET['pais'];
     $sql="DELETE FROM PRODUCTOS WHERE CODIGOARTICULO= :c_art";
     $resultado = $base->prepare($sql);
     $resultado-> execute(array(":c_art"=>$c_art));
+```
+#
+## Clase 57, Conexión a BBDD utilizando Clases POO --> carpeta BBDDconClasesPOO
+1. Creamos un primer archivo donde vamos a incorporar la variables de entorno de nuestra BBDD
+2. Creamos un archivo de conexion a esa base de datos mediante una clase **Conexion**.
+- Dentro del método constructor incorporamos el código para conectarnos a esa base de datos.
+    - De esta manera garantizamoss que cada que se crea una instancia de la clase **Conexion** se establezca automáticamente una conexión con la base de datos.
+    - Permite manejar cualquier error de conexión inmediatamente y mostrar un mensaje de error si la conexión falla.
+### Modularización --- reutilización de código y mejorar el manejo de errores.
+3. Archivo devProductos aplicamos la herencia de clases
+- Con el método parent ejecuta el constructor de la clase conexion.
+```
+parent::__construct();
+public function getProducts(){
+        $resultado=$this->conexion_db->query("SELECT * FROM PRODUCTOS");
+    }
+```
+- Utilizamos la variable conexion_db, directamente de la clase padre sin declararla en esta.
+4. Último archivo para visualizar los datos, llamando al archivo devProductos.php y creando una variable a raiz de la clase DevuelveProductos.
+- Llamamos al método **getProducts** declarado en la clase devuelveProducts
+#
+## Clase 58, conexión a BBDD utilizando clases POO y PDO ( extra de 57)
+**Conexión como en clase 52**, mediante try and catch configuramos la conexión.
+```
+    public function getProduct($dato){
+        $sql="SELECT*FROM PRODUCTOS WHERE PAISDEORIGEN=' " . $dato .  " ' ";
+        $sentencia=$this->conexion_db->prepare($sql);
+    }
+
 ```
