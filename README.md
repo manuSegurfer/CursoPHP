@@ -251,3 +251,22 @@ public function getProducts(){
     }
 
 ```
+#
+## Clase 59, Sistema de login
+Realizamos una llamada al base de datos mediante PDO como en otros ejercicios, pero una vez utilizado el método prepare() ...
+- Utilizamos las funciones:
+    - **htmlentities()** --> Convierte caracteres especiales en entidades HTML. Útil cuando se desea mostrar texto en una página web y se quiere asegurar que los caracteres no sean interpretados como código HTML, sino como texto literal.
+    - **htmlentities(addslashes())**--> Con esta función escapamos los caractere especiales con barra invertida. Útil cuando se necesita insertar datos en una adena que será utilizada en una consulta de base de datos o en cualquier otro contexto donde se requira escapar los caracteres especiales para evitar problemas de seguridad o errores de sintaxis.
+        - Es útil pero es más eficaz utilizar la función **mysqli_real_escape_string()**.
+    - **bindValue("marcador", variable)** --> Se utiliza para ejecutar sentencias SQL de manera segura y eficiente. Enlazando valores a parámetros en una sentencia preparada.
+```
+ $login=htmlentities(addslashes($_POST["login"]));
+    $password=htmlentities(addslashes($_POST["password"]));
+    $resultado->bindValue(":login", $login);
+    $resultado->bindValue(":password", $password);
+```
+- **rowCount()** --> Número de registros que devuelve una consulta.
+    - Si no existe devuelve un 0 y si existe devuelve un 1.
+```
+
+```
