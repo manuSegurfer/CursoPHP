@@ -11,7 +11,7 @@
 session_start();
 session_destroy();
 
-header("Location:login.php");
+header("Location:login2.php");
 ?>
 </body>
 </html>

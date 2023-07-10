@@ -305,7 +305,7 @@ if(!isset($_SESSION["usuario"])){
 ?>
 ```
 #
-## Clase 60, Sistema de login III
+## Clase 61, Sistema de login III
 Cerrar sesión:
 ```
 <?php
@@ -315,3 +315,27 @@ session_destroy();
 header("Location:login.php");
 ?>
 ```
+#
+## Clase 62, Sesiones y PHP SELF
+- Variable super global $_SERVER["php_self];
+Se encarga en esta clase de crear una especie de SPA donde al logearte desaparece el menú del login y se mantiene todo lo demás que haya en la página del login.
+
+Introduce este código separando el código en distintos archivos.
+```
+if(!isset($_SESSION["usuario"])){
+    include ("Formulario.php");
+}else{
+    echo "Usuario: " . $_SESSION["usuario"];
+}
+```
+#
+## Clase 63, Cookies I
+¿qué son? --> Fichero de texto, que almacena información al realizar una petición al servidor de la web.
+- En una web e-commerce lo normal es que guarde aquello que el usuario está guardando en el carrito.
+- Determinamos el tiempo que una cookie se mantiene en memoria.
+
+Se crean mediante el método **setCookie()**, dentro de la función se utiliza el método clave-valor para estructurarla.
+https://www.php.net/manual/es/function.setcookie.php
+
+Mediante la variable super global $_COOKIE["nombre de la cookie"];
+Al no establecer tiempo de mantenimiento de la cookie, la cookie desaparece al cerrar el navegador.
