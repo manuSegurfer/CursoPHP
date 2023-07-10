@@ -268,5 +268,50 @@ Realizamos una llamada al base de datos mediante PDO como en otros ejercicios, p
 - **rowCount()** --> Número de registros que devuelve una consulta.
     - Si no existe devuelve un 0 y si existe devuelve un 1.
 ```
+$numero_registro=$resultado->rowCount();
+    if($numero_registro != 0){
+        echo "Hola";
+    }else{
+        header("Location:login.php");
+    }
+```
+#
+## Clase 59, Sistema de login II
+Protección de rutas mediante manejo de sesiones
+- Imprescindible que una sesión esté abierta para que se pueda acceder a una página determinada
+Mediante:
+- **session_start()** --> Iniciar una nueva sesión o reanudar la existente.
+https://www.php.net/manual/es/function.session-start.php
+- Se puede utilizar este función mediante $_GET, $_POST o mediante las cookies.
+- Variable super global **$_SESSION**, para almacenar el login del usuario, implicando que se puede utilizar lo almacenado en esa variable en cualquier sitio de nuestra página.
+**Página de login**
+```
+if($numero_registro != 0){
+        session_start();
+        $_SESSION["usuario"]= $_POST["login"];
+        header("Location:usuario_registrado.php");
+    }else{
+        header("Location:login.php");
+    }
+```
+**Página de bienvenidos**
+- Reanudar la sesión, si se ha iniciado anteriormente. Recuperando lo que almacenamos en la variable super global en la página anterior.
+```
+<?php
+session_start();
+if(!isset($_SESSION["usuario"])){
+    header("Location: login.php");
+}
+?>
+```
+#
+## Clase 60, Sistema de login III
+Cerrar sesión:
+```
+<?php
+session_start();
+session_destroy();
 
+header("Location:login.php");
+?>
 ```

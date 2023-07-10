@@ -12,7 +12,7 @@
 
 
 try {
-    $base = new PDO("mysql:host=localhost; dbname=pokemon", "root", "");
+    $base = new PDO("mysql:host=localhost; dbname=pruebas", "root", "");
     $base->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $sql= "SELECT * FROM USUARIOS_PASS WHERE USUARIOS= :login AND PASSWORD= :password";
     $resultado=$base->prepare($sql);
@@ -24,7 +24,9 @@ try {
     $resultado->execute();
     $numero_registro=$resultado->rowCount();
     if($numero_registro != 0){
-        echo "Hola";
+        session_start();
+        $_SESSION["usuario"]= $_POST["login"];
+        header("Location:usuario_registrado.php");
     }else{
         header("Location:login.php");
     }
